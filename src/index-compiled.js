@@ -15,11 +15,6 @@ var _Main = require('./components/Main');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Render the main component into the dom
-_reactDom2.default.render(_react2.default.createElement(
-  'div',
-  null,
-  _react2.default.createElement(_Main.AppComponent, null),
-  _react2.default.createElement(_Main.Hi, null)
-), document.getElementById('app'));
+_reactDom2.default.render(_react2.default.createElement(_Main.AppComponent, null), document.getElementById('app'));
 
 //# sourceMappingURL=index-compiled.js.map

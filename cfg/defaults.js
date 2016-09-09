@@ -6,9 +6,9 @@
  */
 'use strict';
 
-const path = require('path');
-const srcPath = path.join(__dirname, '/../src');
-const dfltPort = 8000;
+var path = require('path');
+var srcPath = path.join(__dirname, '/../src');
+var dfltPort = 8000;
 
 /**
  * Get the default modules object for webpack
@@ -16,43 +16,33 @@ const dfltPort = 8000;
  */
 function getDefaultModules() {
   return {
-    preLoaders: [
-      {
-        test: /\.(js|jsx)$/,
-        include: srcPath,
-        loader: 'eslint-loader'
-      }
-    ],
-    loaders: [
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
-      },
-      {
-        test: /\.sass/,
-        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded&indentedSyntax'
-      },
-      {
-        test: /\.scss/,
-        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
-      },
-      {
-        test: /\.less/,
-        loader: 'style-loader!css-loader!less-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
-        test: /\.(png|jpg|gif|woff|woff2)$/,
-        loader: 'url-loader?limit=8192'
-      },
-      {
-        test: /\.(mp4|ogg|svg)$/,
-        loader: 'file-loader'
-      }
-    ]
+    preLoaders: [{
+      test: /\.(js|jsx)$/,
+      include: srcPath,
+      loader: 'eslint-loader'
+    }],
+    loaders: [{
+      test: /\.css$/,
+      loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
+    }, {
+      test: /\.sass/,
+      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded&indentedSyntax'
+    }, {
+      test: /\.scss/,
+      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+    }, {
+      test: /\.less/,
+      loader: 'style-loader!css-loader!less-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
+    }, {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }, {
+      test: /\.(png|jpg|gif|woff|woff2)$/,
+      loader: 'url-loader?limit=8192'
+    }, {
+      test: /\.(mp4|ogg|svg)$/,
+      loader: 'file-loader'
+    }]
   };
 }
 
@@ -62,3 +52,5 @@ module.exports = {
   port: dfltPort,
   getDefaultModules: getDefaultModules
 };
+
+//# sourceMappingURL=defaults-compiled.js.map

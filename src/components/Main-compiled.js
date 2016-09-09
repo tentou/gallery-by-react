@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Hi = exports.AppComponent = undefined;
+exports.AppComponent = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23,12 +23,57 @@ require('normalize.css/normalize.css');
 require('styles/App.css');
 
 var imageDatas = require('../data/imageData.json');
-var imageURL;
+
+imageDatas = function (imagesNum) {
+  for (var i = imagesNum.length; i--;) {
+    var imageInfo = imagesNum[i];
+    imageInfo.imageUrl = require('../images/' + imageInfo.fileName); //给当前对象赋值添加imageName属性
+    imagesNum[i] = imageInfo; //重新定义json数据的对象，分别给加了一个imageUrl属性
+  }
+  return imagesNum;
+  console.log(imagesNum);
+}(imageDatas);
 
 var yeomanImage = require('../images/yeoman.png');
 
-var AppComponent = function (_React$Component) {
-  _inherits(AppComponent, _React$Component);
+var ImgFigure = function (_React$Component) {
+  _inherits(ImgFigure, _React$Component);
+
+  function ImgFigure() {
+    _classCallCheck(this, ImgFigure);
+
+    return _possibleConstructorReturn(this, (ImgFigure.__proto__ || Object.getPrototypeOf(ImgFigure)).apply(this, arguments));
+  }
+
+  _createClass(ImgFigure, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'figure',
+        null,
+        _react2.default.createElement('img', { src: this.props.data.imageUrl,
+          alt: this.props.data.title }),
+        _react2.default.createElement(
+          'figcaption',
+          null,
+          _react2.default.createElement(
+            'h2',
+            { className: 'img-title' },
+            this.props.data.title
+          )
+        )
+      );
+    }
+  }]);
+
+  return ImgFigure;
+}(_react2.default.Component);
+
+//大管家-操作都在这里
+
+
+var AppComponent = function (_React$Component2) {
+  _inherits(AppComponent, _React$Component2);
 
   function AppComponent() {
     _classCallCheck(this, AppComponent);
@@ -39,21 +84,21 @@ var AppComponent = function (_React$Component) {
   _createClass(AppComponent, [{
     key: 'render',
     value: function render() {
+      var imgFigures = [];
+      imageDatas.forEach(function (value, i) {
+        imgFigures.push(_react2.default.createElement(ImgFigure, { key: i, data: value }));
+        //console.log(value.imageUrl)
+      });
+
       return _react2.default.createElement(
-        'div',
-        { className: 'index' },
-        _react2.default.createElement('img', { src: yeomanImage, alt: 'Yeoman Generator' }),
+        'section',
+        { className: 'stage' },
         _react2.default.createElement(
-          'div',
-          { className: 'notice' },
-          'Please edit ',
-          _react2.default.createElement(
-            'code',
-            null,
-            'src/components/Main.js'
-          ),
-          ' to get started!'
-        )
+          'section',
+          { className: 'img-sec' },
+          imgFigures
+        ),
+        _react2.default.createElement('nav', { className: 'controller-nav' })
       );
     }
   }]);
@@ -61,36 +106,8 @@ var AppComponent = function (_React$Component) {
   return AppComponent;
 }(_react2.default.Component);
 
-var Hi = function (_React$Component2) {
-  _inherits(Hi, _React$Component2);
-
-  function Hi() {
-    _classCallCheck(this, Hi);
-
-    return _possibleConstructorReturn(this, (Hi.__proto__ || Object.getPrototypeOf(Hi)).apply(this, arguments));
-  }
-
-  _createClass(Hi, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-          'span',
-          null,
-          'nimma呵呵大imanimanima'
-        )
-      );
-    }
-  }]);
-
-  return Hi;
-}(_react2.default.Component);
-
 AppComponent.defaultProps = {};
 
 exports.AppComponent = AppComponent;
-exports.Hi = Hi;
 
 //# sourceMappingURL=Main-compiled.js.map
