@@ -8,7 +8,8 @@ var imageDatas = require('../data/imageData.json');
 
 //取区间值方法
 var getRangeRandom = (low, high) => Math.floor(Math.random() * (high - low) + low);   //这个以后可以通用
-
+//获取0~30°之间的一个任意正负值
+var get30DegRandom = () => (Math.random() > 0.5 ? '' : '-') + Math.floor(Math.random() * 30);
 imageDatas = (function (imagesNum) {
   for (var i = imagesNum.length; i--;) {
     var imageInfo = imagesNum[i];
@@ -19,22 +20,52 @@ imageDatas = (function (imagesNum) {
 })(imageDatas);
 
 class ImgFigure extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);   //这句我没有搞懂--好像是下边娶不到ImgFigure是第几个，所以需要绑定一下
+  }
+  handleClick(e) {
+    if(this.props.arrange.isCenter) {
+      this.props.inverse();
+    } else {
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
 
   render() {
     //初始化最开始的位置
     var styleObj = {};
-    //如果props属性中制定了这张图片的位置,则使用
+
+    //通过props属性得到给分配到的 this.state.imgsArrangeArr[i] = arrange
     if(this.props.arrange.pos) {
       styleObj = this.props.arrange.pos;
     }
+    if(this.props.arrange.rotate) {
+      (['MozTransform', 'msTransform', 'WebkitTransform', 'transform']).forEach((value) => {
+        styleObj[value] = 'rotate(' + this.props.arrange.rotate + 'deg)';
+      })
+    }
+    if(this.props.arrange.isCenter) {
+      styleObj.zIndex = 11;
+    }
+    let imgFigureClassName = 'img-figure';
+    imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
 
     return (
-      <figure className="img-figure" style={styleObj}>   {/*这个style可以直接是一个对象*/}
+      <figure className={ imgFigureClassName } style={styleObj} onClick={this.handleClick}>   {/*这个style可以直接是一个对象*/}
         <img src={this.props.data.imageUrl}
              alt={this.props.data.title}/>
         <figcaption>
           <h2 className="img-title">{this.props.data.title}
           </h2>
+          <div className="img-back" onClick={this.handleClick}>  {/*正反两面*/}
+            <p>
+              {this.props.data.desc}
+            </p>
+          </div>
         </figcaption>
       </figure>
     )
@@ -46,6 +77,8 @@ class AppComponent extends React.Component {
   //设置模型
   constructor(props) {
     super(props);   //引用超类的constructor属性，因为这个是扩展，所以必须要写上这个
+
+    //整体范围模型
     this.Constant = {
       centerPos: {
         left: 0,
@@ -64,7 +97,7 @@ class AppComponent extends React.Component {
       }
     };
 
-    //初始化state 代替以前的getInitialState
+    //初始状态state 代替以前的getInitialState
     this.state = {
       imgsArrangeArr:[
 
@@ -73,12 +106,25 @@ class AppComponent extends React.Component {
         //   pos:{
         //     left:'0',
         //     top:'0'
-        //   }
+        //   },
+        //  rotate:'0',
+        //  isInverse: false,  //图片正反面
+        //  isCenter: false //图片是否居中
         // }
       ]
     }
   }
 
+  inverse(index) {
+    return () => {
+      let imgsArrangeArr = this.state.imgsArrangeArr;
+
+      imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+      this.setState({
+        imgsArrangeArr: imgsArrangeArr
+      })
+    };
+  }
 
   // 页面加载后计算好位置
   componentDidMount(){
@@ -147,7 +193,9 @@ class AppComponent extends React.Component {
 
     //首先居中 centerIndex 的图片
     imgsArrangeCenterArr[0] = {
-      pos: centerPos
+      pos: centerPos,
+      rotate:'0',
+      isCenter: true
     }
 
     //取出要布局上侧的图片的状态信息
@@ -160,7 +208,10 @@ class AppComponent extends React.Component {
         pos: {
           top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),      //getRangeRandom这个在上边我们定义一个方法，来随机去除一个值的方法
           left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
-        }
+        },
+        rotate: get30DegRandom(),
+        isCenter: false
+
       };
     });
 
@@ -178,7 +229,9 @@ class AppComponent extends React.Component {
         pos: {
           top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
           left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
-        }
+        },
+        rotate: get30DegRandom(),
+        isCenter: false
       }
     }
 
@@ -198,6 +251,13 @@ class AppComponent extends React.Component {
     });
 
   }
+
+  center(index) {
+    return () => {
+      this.rearrange(index);
+    }
+  }
+
   render() {
     var controllerUnits = [],
       imgFigures = [];  //放列表的数组
@@ -207,10 +267,13 @@ class AppComponent extends React.Component {
           pos: {
             left: 0,
             top: 0
-          }
+          },
+          rotate: 0,
+          isInverse: false,
+          isCenter: false //图片是否居中
         }
       }
-      imgFigures.push(<ImgFigure key={i} data={value} ref={'imgFigure'+i} arrange={this.state.imgsArrangeArr[i]} />);  // 这个arrange带有每张图片的状态信息
+      imgFigures.push(<ImgFigure key={i} data={value} ref={'imgFigure'+i} arrange={this.state.imgsArrangeArr[i]} inverse={this.inverse(i)} center={this.center(i)} />);  // 这个arrange带有每张图片的状态信息
       //console.log(value.imageUrl)
     }.bind(this));
 

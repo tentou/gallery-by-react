@@ -32,7 +32,10 @@ var imageDatas = require('../data/imageData.json');
 var getRangeRandom = function getRangeRandom(low, high) {
   return Math.floor(Math.random() * (high - low) + low);
 }; //这个以后可以通用
-
+//获取0~30°之间的一个任意正负值
+var get30DegRandom = function get30DegRandom() {
+  return (Math.random() > 0.5 ? '' : '-') + Math.floor(Math.random() * 30);
+};
 imageDatas = function (imagesNum) {
   for (var i = imagesNum.length; i--;) {
     var imageInfo = imagesNum[i];
@@ -45,25 +48,53 @@ imageDatas = function (imagesNum) {
 var ImgFigure = function (_React$Component) {
   _inherits(ImgFigure, _React$Component);
 
-  function ImgFigure() {
+  function ImgFigure(props) {
     _classCallCheck(this, ImgFigure);
 
-    return _possibleConstructorReturn(this, (ImgFigure.__proto__ || Object.getPrototypeOf(ImgFigure)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (ImgFigure.__proto__ || Object.getPrototypeOf(ImgFigure)).call(this, props));
+
+    _this.handleClick = _this.handleClick.bind(_this); //这句我没有搞懂--好像是下边娶不到ImgFigure是第几个，所以需要绑定一下
+    return _this;
   }
 
   _createClass(ImgFigure, [{
+    key: 'handleClick',
+    value: function handleClick(e) {
+      if (this.props.arrange.isCenter) {
+        this.props.inverse();
+      } else {
+        this.props.center();
+      }
+
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       //初始化最开始的位置
       var styleObj = {};
-      //如果props属性中制定了这张图片的位置,则使用
+
+      //通过props属性得到给分配到的 this.state.imgsArrangeArr[i] = arrange
       if (this.props.arrange.pos) {
         styleObj = this.props.arrange.pos;
       }
+      if (this.props.arrange.rotate) {
+        ['MozTransform', 'msTransform', 'WebkitTransform', 'transform'].forEach(function (value) {
+          styleObj[value] = 'rotate(' + _this2.props.arrange.rotate + 'deg)';
+        });
+      }
+      if (this.props.arrange.isCenter) {
+        styleObj.zIndex = 11;
+      }
+      var imgFigureClassName = 'img-figure';
+      imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
 
       return _react2.default.createElement(
         'figure',
-        { className: 'img-figure', style: styleObj },
+        { className: imgFigureClassName, style: styleObj, onClick: this.handleClick },
         '   ',
         _react2.default.createElement('img', { src: this.props.data.imageUrl,
           alt: this.props.data.title }),
@@ -74,6 +105,16 @@ var ImgFigure = function (_React$Component) {
             'h2',
             { className: 'img-title' },
             this.props.data.title
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'img-back', onClick: this.handleClick },
+            '  ',
+            _react2.default.createElement(
+              'p',
+              null,
+              this.props.data.desc
+            )
           )
         )
       );
@@ -94,9 +135,11 @@ var AppComponent = function (_React$Component2) {
     _classCallCheck(this, AppComponent);
 
     //引用超类的constructor属性，因为这个是扩展，所以必须要写上这个
-    var _this2 = _possibleConstructorReturn(this, (AppComponent.__proto__ || Object.getPrototypeOf(AppComponent)).call(this, props));
 
-    _this2.Constant = {
+    //整体范围模型
+    var _this3 = _possibleConstructorReturn(this, (AppComponent.__proto__ || Object.getPrototypeOf(AppComponent)).call(this, props));
+
+    _this3.Constant = {
       centerPos: {
         left: 0,
         right: 0
@@ -114,8 +157,8 @@ var AppComponent = function (_React$Component2) {
       }
     };
 
-    //初始化state 代替以前的getInitialState
-    _this2.state = {
+    //初始状态state 代替以前的getInitialState
+    _this3.state = {
       imgsArrangeArr: [
 
         //形如下边这样
@@ -123,17 +166,34 @@ var AppComponent = function (_React$Component2) {
         //   pos:{
         //     left:'0',
         //     top:'0'
-        //   }
+        //   },
+        //  rotate:'0',
+        //  isInverse: false,  //图片正反面
+        //  isCenter: false //图片是否居中
         // }
       ]
     };
-    return _this2;
+    return _this3;
   }
 
-  // 页面加载后计算好位置
-
-
   _createClass(AppComponent, [{
+    key: 'inverse',
+    value: function inverse(index) {
+      var _this4 = this;
+
+      return function () {
+        var imgsArrangeArr = _this4.state.imgsArrangeArr;
+
+        imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+        _this4.setState({
+          imgsArrangeArr: imgsArrangeArr
+        });
+      };
+    }
+
+    // 页面加载后计算好位置
+
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
 
@@ -205,7 +265,9 @@ var AppComponent = function (_React$Component2) {
 
       //首先居中 centerIndex 的图片
       imgsArrangeCenterArr[0] = {
-        pos: centerPos
+        pos: centerPos,
+        rotate: '0',
+        isCenter: true
       };
 
       //取出要布局上侧的图片的状态信息
@@ -219,7 +281,10 @@ var AppComponent = function (_React$Component2) {
           pos: {
             top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]), //getRangeRandom这个在上边我们定义一个方法，来随机去除一个值的方法
             left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
-          }
+          },
+          rotate: get30DegRandom(),
+          isCenter: false
+
         };
       });
 
@@ -238,7 +303,9 @@ var AppComponent = function (_React$Component2) {
           pos: {
             top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
             left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
-          }
+          },
+          rotate: get30DegRandom(),
+          isCenter: false
         };
       }
 
@@ -259,6 +326,15 @@ var AppComponent = function (_React$Component2) {
       });
     }
   }, {
+    key: 'center',
+    value: function center(index) {
+      var _this5 = this;
+
+      return function () {
+        _this5.rearrange(index);
+      };
+    }
+  }, {
     key: 'render',
     value: function render() {
       var controllerUnits = [],
@@ -270,10 +346,13 @@ var AppComponent = function (_React$Component2) {
             pos: {
               left: 0,
               top: 0
-            }
+            },
+            rotate: 0,
+            isInverse: false,
+            isCenter: false //图片是否居中
           };
         }
-        imgFigures.push(_react2.default.createElement(ImgFigure, { key: i, data: value, ref: 'imgFigure' + i, arrange: this.state.imgsArrangeArr[i] })); // 这个arrange带有每张图片的状态信息
+        imgFigures.push(_react2.default.createElement(ImgFigure, { key: i, data: value, ref: 'imgFigure' + i, arrange: this.state.imgsArrangeArr[i], inverse: this.inverse(i), center: this.center(i) })); // 这个arrange带有每张图片的状态信息
         //console.log(value.imageUrl)
       }.bind(this));
 
