@@ -22,9 +22,12 @@ imageDatas = (function (imagesNum) {
 class ImgFigure extends React.Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);   //这句我没有搞懂--好像是下边娶不到ImgFigure是第几个，所以需要绑定一下
+
+    // ★★★★★ 使用ES6 class语法创建组件， class中的方法不会自动将this绑定到实例中。必须使用 .bind(this)或者 箭头函数 ＝>来进行手动绑定，也可以将绑定方法写到constructor中。http://www.cnblogs.com/yongjz/p/5356914.html
+    this.handleClick = this.handleClick.bind(this);
   }
   handleClick(e) {
+
     if(this.props.arrange.isCenter) {
       this.props.inverse();
     } else {
