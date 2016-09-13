@@ -21,28 +21,40 @@ function getDefaultModules() {
       include: srcPath,
       loader: 'eslint-loader'
     }],
-    loaders: [{
-      test: /\.css$/,
-      loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
-    }, {
-      test: /\.sass/,
-      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded&indentedSyntax'
-    }, {
-      test: /\.scss/,
-      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
-    }, {
-      test: /\.less/,
-      loader: 'style-loader!css-loader!less-loader!autoprefixer-loader?{browsers:["last 2 version"]}'
-    }, {
-      test: /\.json$/,
-      loader: 'json-loader'
-    }, {
-      test: /\.(png|jpg|gif|woff|woff2)$/,
-      loader: 'url-loader?limit=8192'
-    }, {
-      test: /\.(mp4|ogg|svg)$/,
-      loader: 'file-loader'
-    }]
+    loaders: [
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader!autoprefixer-loader?{browsers: ["last 2 version", "firefox 15"]}'
+      },
+      {
+        test: /\.sass/,
+        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded&indentedSyntax'
+      },
+      {
+        test: /\.scss/,
+        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+      },
+      {
+        test: /\.less/,
+        loader: 'style-loader!css-loader!less-loader!autoprefixer-loader?{browsers: ["last 2 version", "firefox 15"]}'
+      },
+      {
+        test: /\.styl/,
+        loader: 'style-loader!css-loader!stylus-loader'
+      },
+      {
+        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svgs)$/,
+        loader: 'url-loader?limit=8192'
+      },
+      {
+        test: /\.json/,
+          loader: 'json-loader'
+      },
+      {
+        test: /\.(mp4|ogg|svg)$/,
+        loader: 'file-loader'
+      }
+    ]
   };
 }
 

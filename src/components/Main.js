@@ -72,6 +72,37 @@ class ImgFigure extends React.Component {
   }
 }
 
+class ControllerUnit extends React.Component{
+  constructor(props){
+    super(props)
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick(e){
+    //如果点击的是当前正是选中的按钮时，则翻转图片
+    if (this.props.arrange.isCenter) {
+      this.props.inverse();
+    }else{
+      this.props.center();   //让图片居中，那导航自然就变为选中状态
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  render(){
+    //判断i对应的图片是否居中，居中的话就添加is-center属性，居中的同时再判断 当前 翻转状态，根据他的翻转状态来定义导航 当前 是否翻转
+    var controllerUnitClassName = 'controller-unit';
+    if(this.props.arrange.isCenter){
+      controllerUnitClassName += ' is-center';
+      if(this.props.arrange.isInverse){
+        controllerUnitClassName += ' is-inverse';
+      }
+    }
+    return(
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
+    )
+  }
+}
+
 //大管家-操作都在这里
 class AppComponent extends React.Component {
   //设置模型
@@ -275,6 +306,7 @@ class AppComponent extends React.Component {
       }
       imgFigures.push(<ImgFigure key={i} data={value} ref={'imgFigure'+i} arrange={this.state.imgsArrangeArr[i]} inverse={this.inverse(i)} center={this.center(i)} />);  // 这个arrange带有每张图片的状态信息
       //console.log(value.imageUrl)
+      controllerUnits.push(<ControllerUnit key={i} arrange={this.state.imgsArrangeArr[i]} inverse={this.inverse(i)} center={this.center(i)}/>)    //key = {i}是用来实现React的diff功能的
     }.bind(this));
 
     return (
@@ -283,7 +315,7 @@ class AppComponent extends React.Component {
           {imgFigures}
         </section>
         <nav className="controller-nav">
-
+          {controllerUnits}
         </nav>
       </section>
     );

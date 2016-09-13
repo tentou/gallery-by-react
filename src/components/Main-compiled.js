@@ -124,11 +124,54 @@ var ImgFigure = function (_React$Component) {
   return ImgFigure;
 }(_react2.default.Component);
 
+var ControllerUnit = function (_React$Component2) {
+  _inherits(ControllerUnit, _React$Component2);
+
+  function ControllerUnit(props) {
+    _classCallCheck(this, ControllerUnit);
+
+    var _this3 = _possibleConstructorReturn(this, (ControllerUnit.__proto__ || Object.getPrototypeOf(ControllerUnit)).call(this, props));
+
+    _this3.handleClick = _this3.handleClick.bind(_this3);
+    return _this3;
+  }
+
+  _createClass(ControllerUnit, [{
+    key: 'handleClick',
+    value: function handleClick(e) {
+      //如果点击的是当前正是选中的按钮时，则翻转图片
+      if (this.props.arrange.isCenter) {
+        this.props.inverse();
+      } else {
+        this.props.center(); //让图片居中，那导航自然就变为选中状态
+      }
+
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      //判断i对应的图片是否居中，居中的话就添加is-center属性，居中的同时再判断 当前 翻转状态，根据他的翻转状态来定义导航 当前 是否翻转
+      var controllerUnitClassName = 'controller-unit';
+      if (this.props.arrange.isCenter) {
+        controllerUnitClassName += ' is-center';
+        if (this.props.arrange.isInverse) {
+          controllerUnitClassName += ' is-inverse';
+        }
+      }
+      return _react2.default.createElement('span', { className: controllerUnitClassName, onClick: this.handleClick });
+    }
+  }]);
+
+  return ControllerUnit;
+}(_react2.default.Component);
+
 //大管家-操作都在这里
 
 
-var AppComponent = function (_React$Component2) {
-  _inherits(AppComponent, _React$Component2);
+var AppComponent = function (_React$Component3) {
+  _inherits(AppComponent, _React$Component3);
 
   //设置模型
   function AppComponent(props) {
@@ -137,9 +180,9 @@ var AppComponent = function (_React$Component2) {
     //引用超类的constructor属性，因为这个是扩展，所以必须要写上这个
 
     //整体范围模型
-    var _this3 = _possibleConstructorReturn(this, (AppComponent.__proto__ || Object.getPrototypeOf(AppComponent)).call(this, props));
+    var _this4 = _possibleConstructorReturn(this, (AppComponent.__proto__ || Object.getPrototypeOf(AppComponent)).call(this, props));
 
-    _this3.Constant = {
+    _this4.Constant = {
       centerPos: {
         left: 0,
         right: 0
@@ -158,7 +201,7 @@ var AppComponent = function (_React$Component2) {
     };
 
     //初始状态state 代替以前的getInitialState
-    _this3.state = {
+    _this4.state = {
       imgsArrangeArr: [
 
         //形如下边这样
@@ -173,19 +216,19 @@ var AppComponent = function (_React$Component2) {
         // }
       ]
     };
-    return _this3;
+    return _this4;
   }
 
   _createClass(AppComponent, [{
     key: 'inverse',
     value: function inverse(index) {
-      var _this4 = this;
+      var _this5 = this;
 
       return function () {
-        var imgsArrangeArr = _this4.state.imgsArrangeArr;
+        var imgsArrangeArr = _this5.state.imgsArrangeArr;
 
         imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
-        _this4.setState({
+        _this5.setState({
           imgsArrangeArr: imgsArrangeArr
         });
       };
@@ -328,10 +371,10 @@ var AppComponent = function (_React$Component2) {
   }, {
     key: 'center',
     value: function center(index) {
-      var _this5 = this;
+      var _this6 = this;
 
       return function () {
-        _this5.rearrange(index);
+        _this6.rearrange(index);
       };
     }
   }, {
@@ -354,6 +397,7 @@ var AppComponent = function (_React$Component2) {
         }
         imgFigures.push(_react2.default.createElement(ImgFigure, { key: i, data: value, ref: 'imgFigure' + i, arrange: this.state.imgsArrangeArr[i], inverse: this.inverse(i), center: this.center(i) })); // 这个arrange带有每张图片的状态信息
         //console.log(value.imageUrl)
+        controllerUnits.push(_react2.default.createElement(ControllerUnit, { key: i, arrange: this.state.imgsArrangeArr[i], inverse: this.inverse(i), center: this.center(i) })); //key = {i}是用来实现React的diff功能的
       }.bind(this));
 
       return _react2.default.createElement(
@@ -364,7 +408,11 @@ var AppComponent = function (_React$Component2) {
           { className: 'img-sec' },
           imgFigures
         ),
-        _react2.default.createElement('nav', { className: 'controller-nav' })
+        _react2.default.createElement(
+          'nav',
+          { className: 'controller-nav' },
+          controllerUnits
+        )
       );
     }
   }]);
