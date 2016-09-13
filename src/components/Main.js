@@ -3,6 +3,7 @@ require('styles/App.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createStore} from 'redux';
 
 var imageDatas = require('../data/imageData.json');
 
