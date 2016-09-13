@@ -194,7 +194,7 @@ class AppComponent extends React.Component {
     //首先居中 centerIndex 的图片
     imgsArrangeCenterArr[0] = {
       pos: centerPos,
-      rotate:'0',
+      //rotate:'0',
       isCenter: true
     }
 

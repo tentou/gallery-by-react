@@ -2,29 +2,11 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/cfg/defaults-compiled.js" />
-        <item url="file://$PROJECT_DIR$/dist/assets/app-compiled.js" />
-        <item url="file://$PROJECT_DIR$/cfg/base-compiled.js" />
-        <item url="file://$PROJECT_DIR$/src/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/src/components/Main-compiled.js" />
-        <item url="file://$PROJECT_DIR$/dist/assets/app-compiled.js" />
-        <item url="file://$PROJECT_DIR$/cfg/1dev-compiled.js" />
-        <item url="file://$PROJECT_DIR$/src/images/Main-compiled-compiled.js" />
-        <item url="file://$PROJECT_DIR$/cfg/dev-compiled.js" />
-        <item url="file://$PROJECT_DIR$/src/images/Main-compiled.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/cfg/defaults-compiled.js" />
-      <root url="file://$PROJECT_DIR$/dist/assets/app-compiled.js" />
-      <root url="file://$PROJECT_DIR$/cfg/base-compiled.js" />
-      <root url="file://$PROJECT_DIR$/src/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/src/components/Main-compiled.js" />
-      <root url="file://$PROJECT_DIR$/dist/assets/app-compiled.js" />
-      <root url="file://$PROJECT_DIR$/cfg/1dev-compiled.js" />
-      <root url="file://$PROJECT_DIR$/src/images/Main-compiled-compiled.js" />
-      <root url="file://$PROJECT_DIR$/cfg/dev-compiled.js" />
-      <root url="file://$PROJECT_DIR$/src/images/Main-compiled.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
