@@ -1,7 +1,7 @@
 /* Base Application Styles */
 @font-face {
     font-family: 'iconfont';
-    src: 
+    src:
     url('../fonts/icons/turn-arrow.woff') format('woff'), /* chrome、firefox */
 
     url('../fonts/icons/turn-arrow.svg') format('svg'); /* iOS 4.1- */
@@ -47,7 +47,7 @@ html,body {
   background: #ffffff;
   box-sizing: border-box;
   transform-origin: 0 50% 0;
-  transform-style: preserve-3d; 
+  transform-style: preserve-3d;
   transition: all ease 1s;
 
 }
@@ -75,7 +75,7 @@ figcaption{
 /*controller-end*/
 
 .is-inverse {
-  transform: translate3D(206px ,0 ,0) rotateY(180deg);
+  transform: translate3D(320px ,0 ,0) rotateY(180deg);
 }
 .img-back {
     position: absolute;
@@ -115,7 +115,7 @@ figcaption{
     line-height: 30px;
     content: '\e600';
     font-size: 80%;
-    -webkit-font-smoothing: antialiased;  灰阶渲染 亚像素渲染
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 .controller-nav .is-inverse {
