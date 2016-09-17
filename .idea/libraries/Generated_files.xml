@@ -2,12 +2,16 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/cfg/defaults-compiled.js" />
+        <item url="file://$PROJECT_DIR$/src/actions/actions-compiled.js" />
+        <item url="file://$PROJECT_DIR$/src/stores/reducers-compiled.js" />
+        <item url="file://$PROJECT_DIR$/src/index-compiled.js" />
         <item url="file://$PROJECT_DIR$/src/components/Main-compiled.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/cfg/defaults-compiled.js" />
+      <root url="file://$PROJECT_DIR$/src/actions/actions-compiled.js" />
+      <root url="file://$PROJECT_DIR$/src/stores/reducers-compiled.js" />
+      <root url="file://$PROJECT_DIR$/src/index-compiled.js" />
       <root url="file://$PROJECT_DIR$/src/components/Main-compiled.js" />
     </CLASSES>
     <JAVADOC />
